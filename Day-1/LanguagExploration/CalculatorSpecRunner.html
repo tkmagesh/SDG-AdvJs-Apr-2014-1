@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Calculator Specs</title>
+	<style>
+	.pass {
+		color : green;
+		font-size: 18pt;
+	}
+	.fail {
+		color : red;
+		font-style: italic;
+		font-size: 18pt;
+		text-decoration: line-through;
+	}
+	</style>
+	<script src="jquery.js"></script>
+	<script src="test.js"></script>
+	<script src="calculator.js"></script>
+	<script type="text/javascript">
+	$(function(){
+		test("A calculator should be able to add two numbers",function(){
+			//Arrange
+			var number1 = 10,
+				number2 = 20,
+				expectedResult = 30;
+
+			//Act
+			var result = add(number1, number2);
+
+			//Assert
+			return result === expectedResult;
+		});
+
+		test("A calculator should be able to add two numbers in string format",function(){
+			//Arrange
+			var number1 = "10",
+				number2 = "20",
+				expectedResult = 30;
+
+			//Act
+			var result = add(number1, number2);
+
+			//Assert
+			return result === expectedResult;
+		});
+		test("A calculator should be able to treat non numeric strings as zero",function(){
+			//Arrange
+			var number1 = "10",
+				number2 = "abc",
+				expectedResult = 10;
+
+			//Act
+			var result = add(number1, number2);
+
+			//Assert
+			return result === expectedResult;
+		});
+		test("A calculator should be able to add only one number",function(){
+			//Arrange
+			var number1 = 10,
+				expectedResult = 10;
+
+			//Act
+			var result = add(number1);
+
+			//Assert
+			return result === expectedResult;
+		});
+		test("A calculator should return zero when added with no numbers",function(){
+			//Arrange
+			var expectedResult = 0;
+
+			//Act
+			var result = add();
+
+			//Assert
+			return result === expectedResult;
+		});
+		test("A calculator should be able to add variable length of numbers",function(){
+			//Arrange
+			var number1 = 10,
+				number2 = 20,
+				number3 = 30,
+				number4 = 40,
+				number5 = 50,
+				expectedResult = 150;
+
+			//Act
+			var result = add(number1, number2, number3, number4, number5);
+
+			//Assert
+			return result === expectedResult;
+		});
+		test("A calculator should be able to accept functions returning numbers as arguments",function(){
+			//Arrange
+			var f1 = function(){ return 10;},
+				f2 = function(){ return 20;},
+				expectedResult = 30;
+
+			//Act
+			var result = add(f1,f2);
+
+			//Assert
+			return result === expectedResult;
+		});
+		test("A calculator should be able to accept functions returning numbers in string format as arguments",function(){
+			//Arrange
+			var f1 = function(){ return "10";},
+				f2 = function(){ return "20";},
+				expectedResult = 30;
+
+			//Act
+			var result = add(f1,f2);
+
+			//Assert
+			return result === expectedResult;
+		});
+		test("A calculator should be able to accept functions returning functions returning numbers as arguments",function(){
+			//Arrange
+			var f1 = function(){ return function(){ return 10;}},
+				f2 = function(){ return function(){ return 20;}},
+				expectedResult = 30;
+
+			//Act
+			var result = add(f1,f2);
+
+			//Assert
+			return result === expectedResult;
+		});
+		test("A calculator should be able to accept an array of numbers as arguments",function(){
+			//Arrange
+			var numbers = [10,20,30,40,50],
+				expectedResult = 150;
+
+			//Act
+			var result = add(numbers);
+
+			//Assert
+			return result === expectedResult;
+		});
+		test("A calculator should be able to accept an array of functions returning functions returning numbers as arguments",function(){
+			//Arrange
+			var f1 = function(){ return function(){ return 10;}},
+				f2 = function(){ return function(){ return 20;}},
+				fns = [f1,f2],
+				expectedResult = 30;
+
+			//Act
+			var result = add(fns);
+
+			//Assert
+			return result === expectedResult;
+		});
+		test("A calculator should be able to accept an array of functions returning functions returning array of numbers as arguments",function(){
+			//Arrange
+			var f1 = function(){ return function(){ return [10,20];}},
+				f2 = function(){ return function(){ return [30,40];}},
+				fns = [f1,f2],
+				expectedResult = 100;
+
+			//Act
+			var result = add(fns);
+
+			//Assert
+			return result === expectedResult;
+		});
+	});
+	</script>
+</head>
+<body>
+	<h1>Calculator</h1>
+	<hr>
+	<ul id="ulSpecs"></ul>
+</body>
+</html>

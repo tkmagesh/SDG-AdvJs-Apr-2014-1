@@ -122,3 +122,64 @@ function each(list,fn){
 	for(var i=0;i<list.length;i++)
 		fn(list[i]);
 }
+
+function min(list,fieldSelector){
+	var result = fieldSelector(list[i]);
+	for(var i=1;i<list.length;i++){
+		var value = fieldSelector(list[i]);
+		if (value < result) result = value;
+	}
+	return result;
+}
+
+function max(list,fieldSelector){
+	var result = fieldSelector(list[i]);
+	for(var i=1;i<list.length;i++){
+		var value = fieldSelector(list[i]);
+		if (value > result) result = value;
+	}
+	return result;
+}
+
+function min(list,fieldSelector){
+	var total = sum(list,fieldSelector);
+	return total/list.length;
+}
+
+function sum(list,fieldSelector){
+	var total = 0;
+	for(var i=0;i<list.length;i++){
+		total += fieldSelector(list[i]);
+	}
+	return total;
+}
+
+function countBy(list,predicate){
+	var result =0;
+	for(var i=0;i<list.length;i++)
+		if (predicate(list[i])) ++result;
+	return result;
+}
+
+function join(leftList,rightList, leftItemKeySelector,rightItemKeySelector,transformer){
+	var result = [];
+	for(var i=0;i<leftList.length;i++){
+		var leftItem = leftList[i];
+		var leftKey = leftItemKeySelector(leftItem);
+		for(var j=0;j<rightList.length;j++){
+			var rightItem = rightList[j];
+			var rightKey =rightItemKeySelector(rightItem);
+			if (leftKey === rightKey)
+				result.push(transformer(leftItem,rightItem));
+		}
+	}
+	return result;
+}
+
+
+
+function find(list,obj){
+	/*write the implementation*/
+}
+
+find(products,{id :7, name :"den", units:40 ,cost:70, category:2}) //=> true;

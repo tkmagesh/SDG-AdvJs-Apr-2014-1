@@ -19,13 +19,31 @@
 		this.hra = 0;
 		this.da = 0;
 		this.tax = 0;
-		this.onSalaryChange = null;
+		
+		//this.onSalaryChange = null;
+
+		var onSalaryChangeCallbacks = [];
+		this.addOnSalaryChange = function(callback){
+			onSalaryChangeCallbacks.push(callback);				
+		};
+
+		var _salary = 0;
+		this.salary = function(val){
+			if (typeof val === "undefined") return _salary;
+			_salary = val;
+			for(var i=0;i<onSalaryChangeCallbacks.length;i++){
+				var callback = onSalaryChangeCallbacks[i];
+				callback();
+			}
+		}
+
 	}
 	SalaryCalculator.prototype.calculate = function(){
 		var gross = this.basic + this.hra + this.da;
 		var net = gross * ((100-this.tax)/100);
-		this.salary = net;
-		if (typeof this.onSalaryChange === "function") this.onSalaryChange();
+		this.salary(net);
+		//if (typeof this.onSalaryChange === "function") this.onSalaryChange();
+		
 	}
 	</script>
 	<script>
@@ -34,9 +52,12 @@
 		window.calculator = new SalaryCalculator();
 
 		/*Binding to model events*/
-		calculator.onSalaryChange = function(){
+		/*calculator.onSalaryChange = function(){
 			$("#divResult").html(calculator.salary);
-		};
+		};*/
+		calculator.addOnSalaryChange(function(){
+			$("#divResult").html(calculator.salary());
+		});
 		
 		$("#txtBasic").change(function(){
 			calculator.basic = parseInt($("#txtBasic").val(),10);

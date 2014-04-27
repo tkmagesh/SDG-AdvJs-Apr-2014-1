@@ -83,63 +83,66 @@
 	</script>
 	<script>
 	/* Views */
-	$(function(){
-		window.calculator = new SalaryCalculator();
+	function SalaryCalculatorView(model){
+		this.model = model;
+		this.template = '<div class="content">		<div><label for="">Basic :</label><input type="text" name="" id="txtBasic"></div>		<div><label for="">Hra :</label><input type="text" name="" id="txtHra"></div>		<div><label for="">Da :</label><input type="text" name="" id="txtDa"></div>		<div>			<label for="">Tax :</label>			<input type="range" name="" id="rangeTax" min="0" max="50" value="10">			<span id="spanTax">[Tax%]</span>		</div>		<div><input type="button" value="Calculate" id="btnCalculate"></div>		<div>			<div id="divResult">Rs.0.00</div>		</div>	</div>';
+		this.$root = $("<div>");
+		this.render = function(){
+			this.$root.append($(this.template));
+		};
+		var that = this;
 
-		/*Binding to model events*/
-		/*calculator.onSalaryChange = function(){
-			$("#divResult").html(calculator.salary);
-		};*/
-		/*calculator.addOnSalaryChange(function(){
-			$("#divResult").html(calculator.salary());
-		});*/
+		this.init = function(){
+			that.model.addOnChange("salary", function(){
+				$("#divResult",that.$root).html(that.model.salary());
+			});
+			
+			that.model.addOnChange("basic", function(){
+				$("#txtBasic",that.$root).val(that.model.basic());
+			});
 
-		calculator.addOnChange("salary", function(){
-			$("#divResult").html(calculator.salary());
-		});
-		
-		$("#txtBasic").change(function(){
-			calculator.basic(parseInt($("#txtBasic").val(),10));
-		});
-		
-		$("#txtHra").change(function(){
-			calculator.hra(parseInt($("#txtHra").val(),10));
-		});
-		
-		$("#txtDa").change(function(){
-			calculator.da(parseInt($("#txtDa").val(),10));
-		});
-		
-		$("#rangeTax").change(function(){
-			calculator.tax(parseInt($("#rangeTax").val(),10));
-		});
+			that.model.addOnChange("hra", function(){
+				$("#txtHra",that.$root).val(that.model.hra());
+			});
 
-		$("#btnCalculate").click(function(){
-			calculator.calculate();
-			//$("#divResult").html(salary);
-		});
-		$("#rangeTax").change(function(){
-			$("#spanTax").html(this.value + "%");
-		});
-	});
+			that.model.addOnChange("da", function(){
+				$("#txtDa",that.$root).val(that.model.da());
+			});
+
+			that.model.addOnChange("tax", function(){
+				$("#rangeTax",that.$root).val(that.model.tax());
+				$("#spanTax",that.$root).html(that.model.tax() + "%");
+			});
+
+			/*Control (View) events*/
+			$(this.$root).on("change","#txtBasic",function(){
+				that.model.basic(parseInt(this.value,10));
+			});
+			
+			$(this.$root).on("change","#txtHra",function(){
+				that.model.hra(parseInt(this.value,10));
+			});
+			
+			$(this.$root).on("change", "#txtDa", function(){
+				that.model.da(parseInt(this.value,10));
+			});
+			
+			$(this.$root).on("change","#rangeTax",function(){
+				that.model.tax(parseInt(this.value,10));
+			});
+
+			$(this.$root).on("click","#btnCalculate",function(){
+				that.model.calculate();
+				//$("#divResult").html(salary);
+			});
+		}
+	}
+	
 	</script>
 </head>
 <body>
 	<h3>Salary Calculator</h3>
 	<hr>
-	<div class="content">
-		<div><label for="">Basic :</label><input type="text" name="" id="txtBasic"></div>
-		<div><label for="">Hra :</label><input type="text" name="" id="txtHra"></div>
-		<div><label for="">Da :</label><input type="text" name="" id="txtDa"></div>
-		<div>
-			<label for="">Tax :</label>
-			<input type="range" name="" id="rangeTax" min="0" max="50" value="10">
-			<span id="spanTax">[Tax%]</span>
-		</div>
-		<div><input type="button" value="Calculate" id="btnCalculate"></div>
-		<div>
-			<div id="divResult">Rs.0.00</div>
-		</div>
-	</div>
+	
 </body>
 </html>

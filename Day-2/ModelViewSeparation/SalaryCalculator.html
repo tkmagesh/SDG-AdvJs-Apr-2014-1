@@ -89,11 +89,13 @@
 		this.$root = $("<div>");
 		this.render = function(){
 			this.$root.append($(this.template));
+			return this;
 		};
 		var that = this;
 
 		this.init = function(){
 			that.model.addOnChange("salary", function(){
+				console.log("this in onChange(salary) is", this);
 				$("#divResult",that.$root).html(that.model.salary());
 			});
 			
@@ -137,12 +139,38 @@
 			});
 		}
 	}
+
+	function SalaryCalculatorLogView(model){
+		this.model = model;
+		this.$root = $("<ul>");
+		var that = this;
+		this.init = function(){
+			this.model.addOnChange("salary",function(){
+				that.$root.append("<li>" + that.model.salary() + "</li>");
+			});
+		};
+		this.render = function(){
+			return this;
+		}
+	}
+
+	$(function(){
+		window.calculator = new SalaryCalculator();
+
+		var view1 = new SalaryCalculatorView(calculator);
+		view1.init();
+		view1.render().$root.appendTo(document.body);
+
+		var view2 = new SalaryCalculatorLogView(calculator);
+		view2.init();
+		view2.render().$root.appendTo(document.body);		
+	})
 	
 	</script>
 </head>
 <body>
 	<h3>Salary Calculator</h3>
 	<hr>
-	
+	<input type="button" value="Dummy" id="btnDummy">
 </body>
 </html>

@@ -33,14 +33,19 @@
 		this.salary = function(val){
 			if (typeof val === "undefined") return _salary;
 			_salary = val;
-			this.triggerChange("salary");
+			this.triggerChange("salary",_salary);
 		};
 
 		this.triggerChange = function(attrName){
 			var callbacks = onChangeCallbacks[attrName] || [];
+			var that = this;
 			for(var i=0;i<callbacks.length;i++){
 				var callback = callbacks[i];
-				callback();
+				setTimeout((function(index,args){
+					 return function(){
+   						callbacks[index].apply(that,Array.prototype.slice.call(args,1));
+					 }
+				})(i,arguments));
 			}
 		}
 
@@ -48,28 +53,28 @@
 		this.basic = function(val){
 			if (typeof val === "undefined") return _basic;
 			_basic = val;
-			this.triggerChange("basic");
+			this.triggerChange("basic",_basic);
 		}
 		
 		var _hra = 0;
 		this.hra = function(val){
 			if (typeof val === "undefined") return _hra;
 			_hra = val;
-			this.triggerChange("hra");
+			this.triggerChange("hra",_hra);
 		}
 
 		var _da = 0;
 		this.da = function(val){
 			if (typeof val === "undefined") return _da;
 			_da = val;
-			this.triggerChange("da");
+			this.triggerChange("da",_da);
 		}
 
 		var _tax = 0;
 		this.tax = function(val){
 			if (typeof val === "undefined") return _tax;
 			_tax = val;
-			this.triggerChange("tax");
+			this.triggerChange("tax",_tax);
 		}
 
 	}
@@ -94,13 +99,13 @@
 		var that = this;
 
 		this.init = function(){
-			that.model.addOnChange("salary", function(){
-				console.log("this in onChange(salary) is", this);
-				$("#divResult",that.$root).html(that.model.salary());
+			that.model.addOnChange("salary", function(salary){
+				//console.log("this in onChange(salary) is", this);
+				$("#divResult",that.$root).html(salary);
 			});
 			
-			that.model.addOnChange("basic", function(){
-				$("#txtBasic",that.$root).val(that.model.basic());
+			that.model.addOnChange("basic", function(basic){
+				$("#txtBasic",that.$root).val(basic);
 			});
 
 			that.model.addOnChange("hra", function(){
@@ -145,8 +150,8 @@
 		this.$root = $("<ul>");
 		var that = this;
 		this.init = function(){
-			this.model.addOnChange("salary",function(){
-				that.$root.append("<li>" + that.model.salary() + "</li>");
+			this.model.addOnChange("salary",function(salary){
+				that.$root.append("<li>" + salary + "</li>");
 			});
 		};
 		this.render = function(){

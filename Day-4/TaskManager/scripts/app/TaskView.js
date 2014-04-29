@@ -1,4 +1,4 @@
-define(['app/TaskModel','jquery','handlebars','text!/templates/TaskTemplate.html'],function(TaskModel,$, hbrs,template){
+define(['app/TaskModel','jquery','handlebars','text!templates/TaskTemplate.html'],function(TaskModel,$, hbrs,template){
 	console.log("TaskView template = ", template);
 	return function TaskView(model){
 		var _model = model;

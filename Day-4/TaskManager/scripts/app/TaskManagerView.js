@@ -1,4 +1,4 @@
-define(['app/TaskManagerModel','app/TaskView','jquery','text!/templates/TaskManagerTemplate.html'],function(TaskManagerModel, TaskView, $, template){
+define(['app/TaskManagerModel','app/TaskView','jquery','text!templates/TaskManagerTemplate.html'],function(TaskManagerModel, TaskView, $, template){
 	console.log("TaskManagerTemplate is ", template);
 	return function TaskManagerView(model){
 		this.$root = $("<div>");

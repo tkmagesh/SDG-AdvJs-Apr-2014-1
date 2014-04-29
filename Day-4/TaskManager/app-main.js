@@ -1,11 +1,12 @@
 requirejs.config({
 		paths : {
-			'handlebars' : '/scripts/vendor/handlebars',
-			'jquery' : '/scripts/vendor/jquery',
-			'app' : '/scripts/app'
-			//'templates' : '/templates'
+			'handlebars' : 'handlebars',
+			'jquery' : 'jquery',
+			'app' : '../../scripts/app',
+			'templates' : '../../templates'
+			
 		},
-		baseUrl : "/scripts/vendor",
+		baseUrl : "scripts/vendor",
 		shim : {
 			handlebars : {
 				exports : 'Handlebars' /*Object reference in WINDOW*/

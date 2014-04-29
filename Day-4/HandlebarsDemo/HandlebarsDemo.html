@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Handlebars Demo</title>
+	<script src="handlebars.js"></script>
+	<script src="jquery.js"></script>
+	<script type="text/template" id="productsTemplate">
+		<table>
+			<tr>
+				<th>Id</th>
+				<th>Name</th>
+				<th>Units</th>
+				<th>Cost</th>
+				<th>Category</th>
+			</tr>
+			{{#each list}}
+			<tr>
+				<td>{{id}}</td>
+				<td>{{name}}</td>
+				<td>{{units}}</td>
+				<td>{{cost}}</td>
+				<td>{{category}}</td>
+			</tr>
+			{{/each}}
+		</table>
+	</script>
+	<script type="text/javascript">
+	$(function(){
+		//data
+		var products = { list : [
+			{id :1, name :"pen", units:90 ,cost:10, category:1},
+			{id :7, name :"den", units:40 ,cost:70, category:2},
+			{id :3, name :"ten", units:75 ,cost:30, category:1},
+			{id :6, name :"len", units:30 ,cost:60, category:2},
+			{id :4, name :"zen", units:10 ,cost:40, category:1},
+			{id :9, name :"ken", units:80 ,cost:20, category:2}
+		]};
+
+		$("#btnLoadData").click(function(){
+			var template = $("#productsTemplate").html();
+			var transformerFn = Handlebars.compile(template);
+			var result = transformerFn(products);
+			$(".content").append(result);
+		})
+	});
+	</script>
+</head>
+<body>
+	<input type="button" value="Load Data" id="btnLoadData">
+	<div class="content"></div>
+	
+</body>
+</html>

@@ -1,14 +1,15 @@
-define(['TaskManagerModel','TaskView','jquery'],function(TaskManagerModel, TaskView, $){
+define(['app/TaskManagerModel','app/TaskView','jquery','text!/templates/TaskManagerTemplate.html'],function(TaskManagerModel, TaskView, $, template){
+	console.log("TaskManagerTemplate is ", template);
 	return function TaskManagerView(model){
 		this.$root = $("<div>");
-		var _templateId = "#TaskManagerTemplate",
+		var //_templateId = "#TaskManagerTemplate",
 			_model = model,
 			that = this;
 
 		this.init = function(){
 			//Model Events
 			_model.addOnChange("add",function(task){
-				var newTaskView = new TaskView(task);
+				var newTaskView = new TaskView(task,"#taskTemplate");
 				newTaskView.init();
 				newTaskView.render().$root.appendTo(that.$root.find("#ulTaskList"));
 			});
@@ -24,7 +25,7 @@ define(['TaskManagerModel','TaskView','jquery'],function(TaskManagerModel, TaskV
 		};
 
 		this.render = function(){
-			this.$root.append($(_templateId).html());
+			this.$root.append(template);
 			return this;
 		}
 

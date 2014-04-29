@@ -38,5 +38,8 @@ define([],function(){
 		this.remove = function(){
 			this.triggerChange("remove");	
 		};
+		this.toJSON = function(){
+			return {taskName : this.taskName(), isCompleted : this.isCompleted()};
+		}
 	};
 });

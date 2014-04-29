@@ -5,6 +5,11 @@
 	<title>Handlebars Demo</title>
 	<script src="handlebars.js"></script>
 	<script src="jquery.js"></script>
+	<script>
+	Handlebars.registerHelper('className', function(data) {
+		  console.log(data);
+		});
+	</script>
 	<script type="text/template" id="productsTemplate">
 		<table>
 			<tr>
@@ -15,7 +20,7 @@
 				<th>Category</th>
 			</tr>
 			{{#each list}}
-			<tr>
+			<tr class={{className .}}>
 				<td>{{id}}</td>
 				<td>{{name}}</td>
 				<td>{{units}}</td>

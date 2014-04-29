@@ -1,4 +1,4 @@
-define([],function(){
+define(['app/TaskModel'],function(TaskModel){
 	return function TaskManagerModel(){
 		this.list = [];
 		this.addTask = function(taskName){

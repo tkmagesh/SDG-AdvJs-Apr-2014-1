@@ -1,8 +1,10 @@
-define(['TaskModel','jquery'],function(TaskModel,$){
+define(['app/TaskModel','jquery','handlebars','text!/templates/TaskTemplate.html'],function(TaskModel,$, hbrs,template){
+	console.log("TaskView template = ", template);
 	return function TaskView(model){
 		var _model = model;
 		this.$root = $("<li>");
 		var that = this;
+
 		this.init = function(){
 			//Model Events
 			_model.addOnChange("taskName", function(taskName){
@@ -25,7 +27,8 @@ define(['TaskModel','jquery'],function(TaskModel,$){
 			});
 		};
 		this.render = function(){
-			this.$root.html(_model.taskName()).addClass(_model.isCompleted() ? "completed" : "");
+			var transformerFn = hbrs.compile(template);
+			this.$root.html(transformerFn(_model.toJSON()));
 			return this;
 		}
 	}

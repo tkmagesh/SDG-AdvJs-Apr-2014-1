@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Task Manager</title>
+
 	<style>
 	.completed {
 		color : red;
@@ -10,15 +11,14 @@
 		font-style : italic;
 	}
 	</style>
-	<script src="require.js" data-main="app-main.js"></script>
+	<!-- <script src="Handlebars.js"></script> -->
+	<script src="scripts/vendor/require.js" data-main="app-main.js"></script>
+
 	<script type="text/template" id="TaskManagerTemplate">
-		<h1>Task Manager</h1>
-		<hr>
-		<span>Task :</span>
-		<input type="text" name="" id="txtTask">
-		<input type="button" value="Add Task" id="btnAddTask">
-		<input type="button" value="Remove Completed" id="btnRemoveCompleted">
-		<ul id="ulTaskList"></ul>
+		
+	</script>
+	<script type="text/template" id="taskTemplate">
+		
 	</script>
 </head>
 <body>

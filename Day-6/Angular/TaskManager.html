@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Task Manager</title>
+	<style type="text/css">
+	.completed {
+		color : red;
+		text-decoration: line-through;
+		font-style: italic;
+	}
+	</style>
+	<script src="angular.js"></script>
+	<script >
+	function Task(id,name){
+		this.id = id;
+		this.name = name;
+		this.isCompleted = false;
+	}
+	Task.prototype.toggleCompletion = function(){
+		this.isCompleted = !this.isCompleted;
+	}
+
+	function TaskController($scope){
+		$scope.tasks = {
+			list : [],
+			addTask : function(taskName){
+				var newTaskId = this.list.length <= 0 ? 1 : (this.list.reduce(function(p,c){
+					return p.id > c.id ? p : c;
+				})).id + 1;
+				var newTask = new Task(newTaskId,taskName);
+				this.list.push(newTask);
+			},
+			removeCompleted : function(){
+				for(var i=this.list.length-1;i>=0;i--)
+					if (this.list[i].isCompleted)
+						this.list.splice(i,1);
+			}
+		}
+	}
+	</script>
+</head>
+<body data-ng-app>
+	<h1>Task Manager</h1>
+	<hr>
+	<div class="content" data-ng-controller="TaskController">
+		<span>Task :</span>
+		<input type="text" data-ng-model="newTask">
+		<input type="button" value="Add Task" data-ng-click="tasks.addTask(newTask)">
+		<input type="button" value="Remove Completed" data-ng-click="tasks.removeCompleted()">
+		<ul>
+			<li data-ng-class="{completed : task.isCompleted}" data-ng-repeat="task in tasks.list track by task.id" data-ng-click="task.toggleCompletion()">{{task.name}}</li>
+		</ul>
+	</div>
+</body>
+</html>

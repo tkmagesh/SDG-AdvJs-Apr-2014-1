@@ -23,8 +23,10 @@
 	}
 	ul{
 		list-style: none;
+		-webkit-padding-start: 0px;
 	}
 	li{
+		margin-left: 0px;
 		margin-bottom: 5px;
 		border: 1px solid black;
 		background-color: #e7e7e7;
@@ -34,52 +36,69 @@
 	</style>
 	<script src="angular.js"></script>
 	<script >
-	function Task(id,name, desc){
-		this.id = id;
-		this.name = name;
-		this.description = desc;
-		this.isCompleted = false;
-	}
-	Task.prototype.toggleCompletion = function(){
-		this.isCompleted = !this.isCompleted;
-	}
-
-
-	function TaskController($scope){
-		$scope.setSelectedTask = function(task){
-			$scope.selectedTask = task;
-		}
-	}
-
-	function TaskListController($scope){
-		$scope.tasks = {
-			list : [],
-			addTask : function(taskName, taskDesc){
-				var newTaskId = this.list.length <= 0 ? 1 : (this.list.reduce(function(p,c){
-					return p.id > c.id ? p : c;
-				})).id + 1;
-				var newTask = new Task(newTaskId,taskName, taskDesc);
-				this.list.push(newTask);
-			},
-			removeCompleted : function(){
-				for(var i=this.list.length-1;i>=0;i--)
-					if (this.list[i].isCompleted)
-						this.list.splice(i,1);
-			},
-			getCompletedTasksCount : function(){
-				return this.list.filter(function(t){ return t.isCompleted;}).length;
+	
+	var myapp = angular
+		.module("TaskModule",[])
+		.filter('trimText',function(){
+			return function(data,length){
+				data = data || "";
+				return data.length > length ? data.substr(0,length) + "..." : data;
 			}
-		}
-	}
-	function TaskDetailsController($scope){
+		})
+		.factory('TaskModel',function(){
+			var Task = function(id,name, desc){
+				this.id = id;
+				this.name = name;
+				this.description = desc;
+				this.isCompleted = false;
+			}
+			Task.prototype.toggleCompletion = function(){
+				this.isCompleted = !this.isCompleted;
+			}
+			return Task;
+		})
+		.factory("TaskStorageService",[function(){
+			return {
+				getAllTasks : function(){
+					console.log("Get all tasks....");
+				}
+			}
+		}])
+		.controller('TaskController',function TaskController($scope){
+			$scope.setSelectedTask = function(task){
+				$scope.selectedTask = task;
+			}
+		})
+		.controller('TaskListController',['$scope','TaskStorageService','TaskModel', function TaskListController($scope,taskStorageService,Task){
+			taskStorageService.getAllTasks();
+			$scope.tasks = {
+				list : [],
+				addTask : function(taskName, taskDesc){
+					var newTaskId = this.list.length <= 0 ? 1 : (this.list.reduce(function(p,c){
+						return p.id > c.id ? p : c;
+					})).id + 1;
+					var newTask = new Task(newTaskId,taskName, taskDesc);
+					this.list.push(newTask);
+				},
+				removeCompleted : function(){
+					for(var i=this.list.length-1;i>=0;i--)
+						if (this.list[i].isCompleted)
+							this.list.splice(i,1);
+				},
+				getCompletedTasksCount : function(){
+					return this.list.filter(function(t){ return t.isCompleted;}).length;
+				}
+			}
+	}])
+	.controller('TaskDetailsController',function TaskDetailsController($scope){
 
-	}
+	});
 	</script>
 	<style>
 	
 	</style>
 </head>
-<body data-ng-app>
+<body data-ng-app="TaskModule">
 	<h1>Task Manager</h1>
 	<hr>
 	<div data-ng-controller="TaskController">
@@ -104,7 +123,7 @@
 			<div data-ng-show="!!selectedTask">
 				<h3>{{selectedTask.name}}</h3>
 				<hr>
-				<p>{{selectedTask.description}}</p>
+				<p>{{selectedTask.description | trimText:50}}</p>
 				<label for="">Comments</label>
 				<textarea></textarea>
 				<input type="button" value="Complete">
